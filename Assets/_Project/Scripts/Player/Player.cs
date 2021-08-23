@@ -1,53 +1,59 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
-using DG.Tweening;
+using TheLine.Maze;
 
-
-[RequireComponent(typeof(PlayerMovable), typeof(PlayerAbility))]
-public class Player : MonoBehaviour
+namespace TheLine.Player
 {
-    public event UnityAction Die;
-    private PlayerMovable _playerMovable;
-    private PlayerAbility _playerAbility;
-
-    public void SetStartPosition(Vector2 point)
+    [RequireComponent(typeof(PlayerMovable), typeof(PlayerAbility))]
+    public class Player : MonoBehaviour
     {
-        point.y = transform.position.y;
-        transform.position = point;
-    }
+        public event UnityAction OnDied;
 
-    public void Move(Vector2 direction)
-    {
-        _playerMovable.Move(direction);
-    }
 
-    private void OnCollisionEnter2D(Collision2D other)
-    {
-        if (other.gameObject.TryGetComponent(out Block block))
+        PlayerMovable playerMovable;
+        PlayerAbility playerAbility;
+
+
+        void OnCollisionEnter2D(Collision2D other)
         {
-            if (_playerAbility.IsDestroyer)
+            if (other.gameObject.TryGetComponent(out Block block))
             {
-                block.Destroy();
-            }
-            else
-            {
-                Die?.Invoke();
+                if (playerAbility.IsDestroyer)
+                {
+                    block.Destroy();
+                }
+                else
+                {
+                    OnDied?.Invoke();
+                }
             }
         }
-    }
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.gameObject.TryGetComponent(out Ability ability))
+        void OnTriggerEnter2D(Collider2D other)
         {
-            _playerAbility.ActiveAbility(ability);
-            ability.DisableSpriteRenderer();
+            if (other.gameObject.TryGetComponent(out Ability ability))
+            {
+                playerAbility.ActiveAbility(ability);
+                ability.DisableSpriteRenderer();
+            }
         }
-    }
 
-    private void Awake()
-    {
-        _playerMovable = GetComponent<PlayerMovable>();
-        _playerAbility = GetComponent<PlayerAbility>();
+        void Awake()
+        {
+            playerMovable = GetComponent<PlayerMovable>();
+            playerAbility = GetComponent<PlayerAbility>();
+        }
+
+
+        public void SetStartPosition(Vector2 point)
+        {
+            point.y = transform.position.y;
+            transform.position = point;
+        }
+
+        public void Move(Vector2 direction)
+        {
+            playerMovable.Move(direction);
+        }
     }
 }

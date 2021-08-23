@@ -1,16 +1,19 @@
 ﻿using UnityEngine;
 
-public static class WaitExtension
+namespace TheLine.Utils
 {
-    public static void Wait(this MonoBehaviour mono, float delay, UnityEngine.Events.UnityAction action)
+    public static class WaitExtension
     {
-        mono.StartCoroutine(ExecuteAction(delay, action));
-    }
+        public static void Wait(this MonoBehaviour mono, float delay, UnityEngine.Events.UnityAction action)
+        {
+            mono.StartCoroutine(ExecuteAction(delay, action));
+        }
 
-    private static System.Collections.IEnumerator ExecuteAction(float delay, UnityEngine.Events.UnityAction action)
-    {
-        yield return new WaitForSecondsRealtime(delay);
-        action.Invoke();
-        yield break;
+        static System.Collections.IEnumerator ExecuteAction(float delay, UnityEngine.Events.UnityAction action)
+        {
+            yield return new WaitForSecondsRealtime(delay);
+            action.Invoke();
+            yield break;
+        }
     }
 }

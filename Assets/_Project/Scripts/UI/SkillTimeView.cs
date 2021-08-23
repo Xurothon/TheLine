@@ -1,36 +1,41 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Text))]
-public class SkillTimeView : MonoBehaviour
+namespace TheLine.UI
 {
-    private Text _timeView;
-    private float _time;
-    private bool _isRun;
-
-    public void Run(float time)
+    [RequireComponent(typeof(Text))]
+    public class SkillTimeView : MonoBehaviour
     {
-        gameObject.SetActive(true);
-        _isRun = true;
-        _time = time;
-    }
+        Text timeView;
+        float time;
+        bool isRun;
 
-    private void Update()
-    {
-        if (_isRun)
+
+        void Update()
         {
-            _time -= Time.deltaTime;
-            _timeView.text = _time.ToString("F1");
-            if (_time < 0)
+            if (isRun)
             {
-                _isRun = false;
-                gameObject.SetActive(false);
+                time -= Time.deltaTime;
+                timeView.text = time.ToString("F1");
+                if (time < 0)
+                {
+                    isRun = false;
+                    gameObject.SetActive(false);
+                }
             }
         }
-    }
 
-    private void Awake()
-    {
-        _timeView = GetComponent<Text>();
+        void Awake()
+        {
+            timeView = GetComponent<Text>();
+        }
+
+
+        public void Run(float time)
+        {
+            gameObject.SetActive(true);
+            isRun = true;
+            this.time = time;
+        }
     }
 }

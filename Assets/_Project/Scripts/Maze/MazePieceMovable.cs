@@ -1,25 +1,33 @@
 ﻿using UnityEngine;
 using DG.Tweening;
 
-[RequireComponent(typeof(MazePiece))]
-public class MazePieceMovable : MonoBehaviour
+namespace TheLine.Maze
 {
-    [SerializeField] private float _speed;
-    private MazePiece _mazePiece;
 
-    public void Move()
+    [RequireComponent(typeof(MazePiece))]
+    public class MazePieceMovable : MonoBehaviour
     {
-        float duration = Vector2.Distance(_mazePiece.EndPoint, transform.position) / _speed;
-        transform.DOMove(_mazePiece.EndPoint, duration);
-    }
+        [SerializeField] float speed;
 
-    private void OnDisable()
-    {
-        DOTween.Kill(transform);
-    }
 
-    private void Awake()
-    {
-        _mazePiece = GetComponent<MazePiece>();
+        private MazePiece _mazePiece;
+
+        void Awake()
+        {
+            _mazePiece = GetComponent<MazePiece>();
+        }
+
+        void OnDisable()
+        {
+            DOTween.Kill(transform);
+        }
+
+
+        public void Move()
+        {
+            float duration = Vector2.Distance(_mazePiece.EndPoint, transform.position) / speed;
+            transform.DOMove(_mazePiece.EndPoint, duration);
+        }
+
     }
 }

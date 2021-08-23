@@ -2,27 +2,36 @@
 using UnityEngine.EventSystems;
 using Zenject;
 
-public class Toucher : MonoBehaviour, IDragHandler, IPointerDownHandler
+namespace TheLine.UI
 {
-    [SerializeField] private Vector2 _borderX;
-    [Inject] private Player _player;
-    private Camera _main;
-    private Vector2 _touch;
-
-    public void OnDrag(PointerEventData eventData)
+    public class Toucher : MonoBehaviour, IDragHandler, IPointerDownHandler
     {
-        _touch = _main.ScreenToViewportPoint(Input.mousePosition);
-        _player.Move(new Vector2(Mathf.Lerp(_borderX.x, _borderX.y, _touch.x), 0));
-    }
+        [SerializeField] Vector2 borderX;
 
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        _touch = _main.ScreenToViewportPoint(Input.mousePosition);
-        _player.SetStartPosition(new Vector2(Mathf.Lerp(_borderX.x, _borderX.y, _touch.x), 0));
-    }
 
-    private void Awake()
-    {
-        _main = Camera.main;
+        [Inject] TheLine.Player.Player player;
+
+
+        Camera main;
+        Vector2 touch;
+
+
+        public void OnDrag(PointerEventData eventData)
+        {
+            touch = main.ScreenToViewportPoint(Input.mousePosition);
+            player.Move(new Vector2(Mathf.Lerp(borderX.x, borderX.y, touch.x), 0));
+        }
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            touch = main.ScreenToViewportPoint(Input.mousePosition);
+            player.SetStartPosition(new Vector2(Mathf.Lerp(borderX.x, borderX.y, touch.x), 0));
+        }
+
+
+        void Awake()
+        {
+            main = Camera.main;
+        }
     }
 }

@@ -1,16 +1,20 @@
 ﻿using UnityEngine;
+using TheLine.Maze;
 
-public class DisablePoint : MonoBehaviour
+namespace TheLine
 {
-    private void OnTriggerEnter2D(Collider2D other)
+    public class DisablePoint : MonoBehaviour
     {
-        if (other.TryGetComponent(out Block block))
+        void OnTriggerEnter2D(Collider2D other)
         {
-            if (block.transform.parent.TryGetComponent(out MazePiece maze))
+            if (other.TryGetComponent(out Block block))
             {
-                if (maze.gameObject.activeInHierarchy)
+                if (block.transform.parent.TryGetComponent(out MazePiece maze))
                 {
-                    maze.Disable();
+                    if (maze.gameObject.activeInHierarchy)
+                    {
+                        maze.Disable();
+                    }
                 }
             }
         }

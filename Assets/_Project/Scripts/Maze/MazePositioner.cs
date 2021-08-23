@@ -1,38 +1,49 @@
 ﻿using UnityEngine;
 using Zenject;
 
-public class MazePositioner : MonoBehaviour
+namespace TheLine.Maze
 {
-    public Vector2Int MazeSize => _objectPool.MazeSize;
-    [SerializeField] private Transform _start;
-    [SerializeField] private int _generateCount;
-    [Inject] private MazePathGenerator _mazePathGenerator;
-    [Inject] private ObjectPool _objectPool;
-    private MazePiece _lastActiveMazePiece;
-
-    public void ActiveMazePiece()
+    public class MazePositioner : MonoBehaviour
     {
-        MazePiece piece = _objectPool.GetMazePiece();
-        piece.transform.position = _lastActiveMazePiece.transform.position + new Vector3(0, MazeSize.y, 0);
-        _mazePathGenerator.CreatePath(piece);
-        piece.Move();
-        _lastActiveMazePiece = piece;
-    }
+        [SerializeField] Transform start;
+        [SerializeField] int generateCount;
 
-    private void SetPosition()
-    {
-        for (int i = 0; i < _generateCount; i++)
+
+        [Inject] MazePathGenerator mazePathGenerator;
+        [Inject] TheLine.ObjectPool.MazePieceObjectPool objectPool;
+
+
+        MazePiece lastActiveMazePiece;
+
+        public Vector2Int MazeSize => objectPool.MazeSize;
+
+
+        void Start()
         {
-            MazePiece piece = _objectPool.GetMazePiece();
-            piece.transform.position = _start.position + new Vector3(0, MazeSize.y * i, 0);
-            _mazePathGenerator.CreatePath(piece);
-            piece.Move();
-            _lastActiveMazePiece = piece;
+            SetPosition();
         }
-    }
 
-    private void Start()
-    {
-        SetPosition();
+
+        public void ActiveMazePiece()
+        {
+            MazePiece piece = objectPool.GetObject();
+            piece.transform.position = lastActiveMazePiece.transform.position + new Vector3(0, MazeSize.y, 0);
+            mazePathGenerator.CreatePath(piece);
+            piece.Move();
+            lastActiveMazePiece = piece;
+        }
+
+
+        void SetPosition()
+        {
+            for (int i = 0; i < generateCount; i++)
+            {
+                MazePiece piece = objectPool.GetObject();
+                piece.transform.position = start.position + new Vector3(0, MazeSize.y * i, 0);
+                mazePathGenerator.CreatePath(piece);
+                piece.Move();
+                lastActiveMazePiece = piece;
+            }
+        }
     }
 }

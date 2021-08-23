@@ -1,54 +1,60 @@
 ﻿using UnityEngine;
-using UnityEngine.Events;
 using System.Collections.Generic;
 
-[RequireComponent(typeof(MazePieceMovable))]
-public class MazePiece : MonoBehaviour
+namespace TheLine.Maze
 {
-    public Block[,] Maze => _maze;
-    public Vector3 EndPoint { get; private set; }
-    private Block[,] _maze;
-    private MazePieceMovable _mazePieceMovable;
-    private MazePositioner _mazePositioner;
-    private List<Ability> _abilities;
-
-    public void BlockInitialize(Block[,] maze)
+    [RequireComponent(typeof(MazePieceMovable))]
+    public class MazePiece : MonoBehaviour
     {
-        _maze = maze;
-    }
+        Block[,] maze;
+        MazePieceMovable mazePieceMovable;
+        MazePositioner mazePositioner;
+        List<Ability> abilities;
 
-    public void Initialize(Vector3 endPoint, MazePositioner mazePositioner)
-    {
-        EndPoint = endPoint;
-        _mazePositioner = mazePositioner;
-    }
 
-    public void Move()
-    {
-        _mazePieceMovable.Move();
-    }
+        public Block[,] Maze => maze;
+        public Vector3 EndPoint { get; private set; }
 
-    public void Disable()
-    {
-        _mazePositioner.ActiveMazePiece();
-        for (int i = 0; i < _abilities.Count; i++)
+
+        void Awake()
         {
-            _abilities[i].transform.parent = null;
-            _abilities[i].gameObject.SetActive(false);
+            mazePieceMovable = GetComponent<MazePieceMovable>();
+            abilities = new List<Ability>();
         }
-        _abilities.Clear();
-        gameObject.SetActive(false);
-    }
 
-    public void AddAbility(Ability ability)
-    {
-        ability.transform.parent = transform;
-        _abilities.Add(ability);
-    }
 
-    private void Awake()
-    {
-        _mazePieceMovable = GetComponent<MazePieceMovable>();
-        _abilities = new List<Ability>();
+        public void BlockInitialize(Block[,] maze)
+        {
+            this.maze = maze;
+        }
+
+        public void Initialize(Vector3 endPoint, MazePositioner mazePositioner)
+        {
+            EndPoint = endPoint;
+            this.mazePositioner = mazePositioner;
+        }
+
+        public void Move()
+        {
+            mazePieceMovable.Move();
+        }
+
+        public void Disable()
+        {
+            mazePositioner.ActiveMazePiece();
+            for (int i = 0; i < abilities.Count; i++)
+            {
+                abilities[i].transform.parent = null;
+                abilities[i].gameObject.SetActive(false);
+            }
+            abilities.Clear();
+            gameObject.SetActive(false);
+        }
+
+        public void AddAbility(Ability ability)
+        {
+            ability.transform.parent = transform;
+            abilities.Add(ability);
+        }
     }
 }

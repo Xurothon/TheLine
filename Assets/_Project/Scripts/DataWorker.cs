@@ -1,40 +1,47 @@
 ﻿using UnityEngine;
+using TheLine.Enum;
 
-public class DataWorker : MonoBehaviour
+namespace TheLine
 {
-    public int BestScore { get; private set; }
-
-    public void UpdateBestScore(int value)
+    public class DataWorker : MonoBehaviour
     {
-        BestScore = value;
-    }
+        public int BestScore { get; private set; }
 
-    private void ReadAllPlayerPrefs()
-    {
-        BestScore = GetValue(PlayerPrefsKeys.BEST_SCORE);
-    }
 
-    private void SaveValue(PlayerPrefsKeys playerPrefsKey, int value)
-    {
-        PlayerPrefs.SetInt(playerPrefsKey.ToString(), value);
-    }
-
-    private int GetValue(PlayerPrefsKeys playerPrefsKey)
-    {
-        if (PlayerPrefs.HasKey(playerPrefsKey.ToString()))
+        void Awake()
         {
-            return PlayerPrefs.GetInt(playerPrefsKey.ToString());
+            ReadAllPlayerPrefs();
         }
-        return 0;
-    }
 
-    private void Awake()
-    {
-        ReadAllPlayerPrefs();
-    }
+        void OnDisable()
+        {
+            SaveValue(PlayerPrefsKeys.BEST_SCORE, BestScore);
+        }
 
-    private void OnDisable()
-    {
-        SaveValue(PlayerPrefsKeys.BEST_SCORE, BestScore);
+
+        public void UpdateBestScore(int value)
+        {
+            BestScore = value;
+        }
+
+
+        void ReadAllPlayerPrefs()
+        {
+            BestScore = GetValue(PlayerPrefsKeys.BEST_SCORE);
+        }
+
+        void SaveValue(PlayerPrefsKeys playerPrefsKey, int value)
+        {
+            PlayerPrefs.SetInt(playerPrefsKey.ToString(), value);
+        }
+
+        int GetValue(PlayerPrefsKeys playerPrefsKey)
+        {
+            if (PlayerPrefs.HasKey(playerPrefsKey.ToString()))
+            {
+                return PlayerPrefs.GetInt(playerPrefsKey.ToString());
+            }
+            return 0;
+        }
     }
 }

@@ -1,5 +1,8 @@
-﻿[System.Serializable]
-public enum PlayerPrefsKeys
+﻿namespace TheLine.Enum
 {
-    BEST_SCORE
+    [System.Serializable]
+    public enum PlayerPrefsKeys
+    {
+        BEST_SCORE
+    }
 }

@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 8857546020982803162}
   - component: {fileID: 8857546020982803164}
   - component: {fileID: 2127785279788497262}
-  - component: {fileID: 8068857754066875489}
   m_Layer: 0
   m_Name: Ability
   m_TagString: Untagged
@@ -96,11 +95,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acee050aa3114774799ab9f71632d369, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gardient:
+  gardient:
     serializedVersion: 2
     key0: {r: 0, g: 1, b: 1, a: 1}
     key1: {r: 0, g: 0, b: 1, a: 1}
-    key2: {r: 0, g: 1, b: 0, a: 0}
+    key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 1, g: 0, b: 0, a: 0}
     key4: {r: 1, g: 0, b: 1, a: 0}
     key5: {r: 1, g: 1, b: 0, a: 0}
@@ -125,7 +124,7 @@ MonoBehaviour:
     m_Mode: 0
     m_NumColorKeys: 6
     m_NumAlphaKeys: 2
-  _colorChangeDuration: 0.6
+  colorChangeDuration: 0.6
 --- !u!61 &2127785279788497262
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -152,16 +151,3 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &8068857754066875489
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8857546020982803161}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9064a74c05282a44d8e4b6b33b0dad18, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _speed: 1.2

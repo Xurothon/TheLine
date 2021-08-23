@@ -2,29 +2,33 @@
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class GameOverPanel : MonoBehaviour
+namespace TheLine.UI
 {
-    [SerializeField] private string _bestScorePrefix;
-    [SerializeField] private Text _bestScore;
-    [SerializeField] private string _scorePrefix;
-    [SerializeField] private Text _score;
-    [SerializeField] private Button _menu;
-
-    public void UpdateScores(int bestScore, int score)
+    public class GameOverPanel : MonoBehaviour
     {
-        _bestScore.text = _bestScorePrefix + bestScore.ToString();
-        _score.text = _scorePrefix + score.ToString();
-    }
+        [SerializeField] string bestScorePrefix;
+        [SerializeField] Text bestScore;
+        [SerializeField] string scorePrefix;
+        [SerializeField] Text score;
+        [SerializeField] Button menu;
 
-    public void RestartLevel()
-    {
-        int index = SceneManager.GetActiveScene().buildIndex;
-        SceneManager.LoadScene(index);
-    }
 
-    private void Awake()
-    {
-        _menu.onClick.AddListener(RestartLevel);
-    }
+        void Awake()
+        {
+            menu.onClick.AddListener(RestartLevel);
+        }
 
+
+        public void UpdateScores(int bestScore, int score)
+        {
+            this.bestScore.text = bestScorePrefix + bestScore.ToString();
+            this.score.text = scorePrefix + score.ToString();
+        }
+
+        public void RestartLevel()
+        {
+            int index = SceneManager.GetActiveScene().buildIndex;
+            SceneManager.LoadScene(index);
+        }
+    }
 }

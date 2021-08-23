@@ -1,49 +1,61 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
+using TheLine.UI;
 
-public class ScoreCounter : MonoBehaviour
+namespace TheLine
 {
-    public int Score => (int)Mathf.Round(_score);
-    [SerializeField] private Text _view;
-    [Inject] private Player _player;
-    [Inject] private PanelWorker _panelWorker;
-    [Inject] private DataWorker _dataWorker;
-    private bool _isRun;
-    private float _score;
-
-    public void Run()
+    public class ScoreCounter : MonoBehaviour
     {
-        _isRun = true;
-    }
+        [SerializeField] Text view;
 
-    private void Stop()
-    {
-        _isRun = false;
-        if (Score > _dataWorker.BestScore)
+
+        [Inject] TheLine.Player.Player player;
+        [Inject] PanelWorker panelWorker;
+        [Inject] DataWorker dataWorker;
+
+
+        bool isRun;
+        float score;
+
+        public int Score => (int)Mathf.Round(score);
+
+
+        void Update()
         {
-            _dataWorker.UpdateBestScore(Score);
+            if (isRun)
+            {
+                score += Time.deltaTime;
+                view.text = score.ToString("F0");
+            }
         }
-    }
 
-    private void Update()
-    {
-        if (_isRun)
+        void OnEnable()
         {
-            _score += Time.deltaTime;
-            _view.text = _score.ToString("F0");
+            player.OnDied += PlayerOnDiedStop;
+            panelWorker.OnGameStarted += PanelWorkerOnGameStarted;
         }
-    }
 
-    private void OnEnable()
-    {
-        _player.Die += Stop;
-        _panelWorker.GameStart += Run;
-    }
+        void OnDisable()
+        {
+            player.OnDied -= PlayerOnDiedStop;
+            panelWorker.OnGameStarted -= PanelWorkerOnGameStarted;
+        }
 
-    private void OnDisable()
-    {
-        _player.Die -= Stop;
-        _panelWorker.GameStart -= Run;
+
+        public void PanelWorkerOnGameStarted()
+        {
+            isRun = true;
+        }
+
+
+        void PlayerOnDiedStop()
+        {
+            isRun = false;
+            if (Score > dataWorker.BestScore)
+            {
+                dataWorker.UpdateBestScore(Score);
+            }
+        }
     }
 }

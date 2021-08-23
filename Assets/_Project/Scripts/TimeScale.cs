@@ -1,46 +1,56 @@
 using UnityEngine;
 using Zenject;
+using TheLine.UI;
 
-public class TimeScale : MonoBehaviour
+namespace TheLine
 {
-    [Range(0, 1)] [SerializeField] private float _slowTime;
-    [Inject] private Player _player;
-    [Inject] private PanelWorker _panelWorker;
-    private float _maxTimeSpeed = 1;
-    private float _startFixedDeltaTime;
-
-    public void Up()
+    public class TimeScale : MonoBehaviour
     {
-        Time.timeScale = _maxTimeSpeed;
-        Time.fixedDeltaTime = _startFixedDeltaTime;
-    }
+        [SerializeField] [Range(0, 1)] float slowTime;
 
-    public void Down()
-    {
-        Time.timeScale = _slowTime;
-        Time.fixedDeltaTime = Time.fixedDeltaTime * _slowTime;
-    }
 
-    private void Awake()
-    {
-        _startFixedDeltaTime = Time.fixedDeltaTime;
-        Down();
-    }
+        [Inject] TheLine.Player.Player player;
+        [Inject] PanelWorker panelWorker;
 
-    private void OnEnable()
-    {
-        _player.Die += Down;
-        _panelWorker.GameStart += Up;
-    }
 
-    private void OnDisable()
-    {
-        _player.Die -= Down;
-        _panelWorker.GameStart -= Up;
-    }
+        float _maxTimeSpeed = 1;
+        float _startFixedDeltaTime;
 
-    private void OnDestroy()
-    {
-        Up();
+
+        void Awake()
+        {
+            _startFixedDeltaTime = Time.fixedDeltaTime;
+            Down();
+        }
+
+        void OnEnable()
+        {
+            player.OnDied += Down;
+            panelWorker.OnGameStarted += Up;
+        }
+
+        void OnDisable()
+        {
+            player.OnDied -= Down;
+            panelWorker.OnGameStarted -= Up;
+        }
+
+        void OnDestroy()
+        {
+            Up();
+        }
+
+
+        public void Up()
+        {
+            Time.timeScale = _maxTimeSpeed;
+            Time.fixedDeltaTime = _startFixedDeltaTime;
+        }
+
+        public void Down()
+        {
+            Time.timeScale = slowTime;
+            Time.fixedDeltaTime = Time.fixedDeltaTime * slowTime;
+        }
     }
 }

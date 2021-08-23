@@ -1,14 +1,18 @@
 ﻿using UnityEngine;
 
-public class Block : MonoBehaviour
+namespace TheLine.Maze
 {
-    [SerializeField] private bool _isCanDestroy;
-
-    public void Destroy()
+    public class Block : MonoBehaviour
     {
-        if (_isCanDestroy)
+        [SerializeField] bool isCanDestroy;
+
+
+        public void Destroy()
         {
-            gameObject.SetActive(false);
+            if (isCanDestroy)
+            {
+                gameObject.SetActive(false);
+            }
         }
     }
 }

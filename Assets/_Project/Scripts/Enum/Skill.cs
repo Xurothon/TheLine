@@ -1,5 +1,8 @@
-﻿[System.Serializable]
-public enum Skill
+﻿namespace TheLine.Enum
 {
-    DESTROY, SMALL
+    [System.Serializable]
+    public enum Skill
+    {
+        DESTROY, SMALL
+    }
 }
